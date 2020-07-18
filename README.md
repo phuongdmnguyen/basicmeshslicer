@@ -1,6 +1,4 @@
 # basicmeshslicer
-
-Basic Mesh Slicer
   
   Arguments:
   - a .stl file encoding a 3D rectangular prism 
