@@ -66,16 +66,6 @@ with open(args["planes"], 'r') as f:
     planes.append((normal, points))
 
 
-# Given in .txt files
-# plane1_normal = (0.094168, -0.993819, 0.0587916)
-# plane1_point = (-3.35276126862e-08, -0.00140627007931, -0.0237716548145)
-# plane1_equation = calculate_plane_equation(plane1_point, plane1_normal)
-
-# plane2_normal = (0.203912, 0.97879, -0.0197536)
-# plane2_point = (0.00557016581297, -8.00095510483, 0.0101777203381)
-# plane2_equation = calculate_plane_equation(plane2_point, plane2_normal)
-
-
 # arguments: equation of the plane, max and min vertex of prism (the a 3 element tuple - (x, y, z))
 # returns: 4 vertices at intersection between the plane and prism (2 front and 2 back)
 #       1. (x_max, y_a, z_max)  -> front_top
@@ -119,29 +109,9 @@ for plane in planes:
 ftop_p1, fbot_p1, btop_p1, bbot_p1 = get_vertices_at_intersection(plane_eqs[0], prism.max_, prism.min_)
 plane1_vertices = np.array([ftop_p1, fbot_p1, btop_p1, bbot_p1])
 
-# # the vertices where plane 2 intersects the prism
-# ftop_p2, fbot_p2, btop_p2, bbot_p2 = get_vertices_at_intersection(plane2_equation, prism.max_, prism.min_)
-# plane2_vertices = np.array([ftop_p2, fbot_p2, btop_p2, bbot_p2])
-
-# Note: y_a, y_b, y_c, y_d of plane 2 is -9.0, -9.0, -8.0 -8.0 (obtained from printing out the above values)
-#            "                plane 1 is 1, 0, -1, -1
-# Therefore, plane 2 is closer to the back face than plane 1
-
-
-# arrays of vertices for the 3 sliced pieces
-# since the plane 2 is close to the back face, the back piece will contain vertices where they intersect along with the
-# vertices of the back face
-# back_piece_vertices = np.concatenate((back_vertices, plane2_vertices), 0)
-# print(back_piece_vertices)
-
-# since the plane 1 is close to the front face, the front piece will contain vertices where they intersect along with
-# the vertices of the front face
 front_piece_vertices = np.concatenate((plane1_vertices, front_vertices), 0)
 
 back_piece_vertices = np.concatenate((back_vertices, plane1_vertices), 0)
-
-# The middle piece will contain vertices at the points where the two planes intersect the prism
-# mid_piece_vertices = np.concatenate((plane2_vertices, plane1_vertices), 0)
 
 
 # these denote the indices from the vertices that make up the 12 triangles of the pieces
@@ -178,21 +148,17 @@ def build_mesh_data(vertices_info, faces_info, mesh_obj):
 
 # initializing empty mesh objects with mesh data (where the vertices are initialized as 0)
 back_piece = mesh.Mesh(np.zeros(faces.shape[0], mesh.Mesh.dtype))
-# mid_piece = mesh.Mesh(np.zeros(faces.shape[0], mesh.Mesh.dtype))
 front_piece = mesh.Mesh(np.zeros(faces.shape[0], mesh.Mesh.dtype))
 
 # build data of each piece using their information
 build_mesh_data(back_piece_vertices, faces, back_piece)
 build_mesh_data(front_piece_vertices, faces, front_piece)
-# build_mesh_data(mid_piece_vertices, faces, mid_piece)
 
 # updating normal vectors for each vertices in each piece
 back_piece.update_normals()
 front_piece.update_normals()
-# mid_piece.update_normals()
 
 # save each piece as an stl
 back_piece.save("backpiece.stl")
-# mid_piece.save("midpiece.stl")
 front_piece.save("frontpiece.stl")
 
