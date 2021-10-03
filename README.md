@@ -16,3 +16,8 @@
 
   How to run script:
   basicmeshslicer.py -i INPUT -p PLANE
+  
+  Example: running the script with the files in the example directory
+  ```
+  basicmeshslicer.py -i Prism.stl -p plane.txt
+  ```
