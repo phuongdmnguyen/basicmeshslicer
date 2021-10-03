@@ -1,5 +1,7 @@
 # basicmeshslicer
   
+  Dependencies: numpy, numpy-stl, argparse
+  
   Arguments:
   - a .stl file encoding a 3D quardilateral prism 
   - a .txt file containing information that respresents a plane:
