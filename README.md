@@ -19,5 +19,5 @@
   
   Example: running the script with the files in the example directory
   ```
-  basicmeshslicer.py -i Prism.stl -p plane.txt
+  basicmeshslicer.py -i example/Prism.stl -p example/plane.txt
   ```
